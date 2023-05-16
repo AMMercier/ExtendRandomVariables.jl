@@ -19,5 +19,8 @@ using Test
     @test P(Z2 < 3)
     @test P(W1 < 3)
     @test P(W2 < 3)
-    
+    @test plotCDF(Z1)
+    @test plotCDF!(Z1)
+    @test plotPDF(Z1)
+    @test plotPDF!(Z1)
 end
