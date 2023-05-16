@@ -21,7 +21,7 @@ julia> Pkg.add(url = "https://github.com/AMMercier/ExtendRandomVariables.jl.git"
 julia> using RandomVariables, Distributions, ExtendRandomVariables, Plots
 ```
 ## Introduction
-*"In order to make a perfect and beautiful machine, it is not requisite to know how to make it."* - Robert Beverley MacKenzie
+###### *"In order to make a perfect and beautiful machine, it is not requisite to know how to make it."* - Robert Beverley MacKenzie
 
 Mathematics is often a "beautiful machine", where we set definite, abstract objects, and allow them to interact in strange, and emergent ways. Consequently, it is often not necessary to enumerate all the pathways by which these constructs interact, but rather simply provide the ruleset by which they interrelate and allow the user to mix and match as they please. This "toy box" approach to mathematics is easily applicable to - and perhaps even highly beneficial for - computer programming. This synergy between mathematics and programming presents an opportunity in a critical area to modern pure and applied mathematics: random variables.
 
