@@ -14,8 +14,10 @@ import Roots.find_zero
 
 include("condexp.jl")
 include("convolution.jl")
+include("plotRV.jl")
 
 export 𝔼, |
-export *, +
+export *, +, -, min, max, cdf, pdf, quantile
+export plotPDF, plotCDF
 
 end
