@@ -14,8 +14,11 @@ Both Distributions.jl and RandomVariables.jl must be installed and loaded to use
 julia> import Pkg
 julia> Pkg.add("Distributions")
 julia> Pkg.add("RandomVariables")
+julia> Pkg.add("QuadGK")
+julia> Pkg.add("Roots")
+julia> Pkg.add("Plots")
 julia> Pkg.add(url = "https://github.com/AMMercier/ExtendRandomVariables.jl.git")
-julia> using RandomVariables, Distributions, ExtendRandomVariables
+julia> using RandomVariables, Distributions, ExtendRandomVariables, Plots
 ```
 ## Introduction
 *"In order to make a perfect and beautiful machine, it is not requisite to know how to make it."* - Robert Beverley MacKenzie
