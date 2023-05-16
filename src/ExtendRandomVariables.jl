@@ -8,7 +8,7 @@ import Base.<, Base.>, Base.<=, Base.>=, Base.==, Base.!=, Base.in
 import Base.!, Base.|, Base.&, Base.⊻
 import Base.+, Base.-, Base.*, Base./, Base.inv, Base.exp, Base.log, Base.sqrt
 import Base.abs, Base.^, Base.adjoint, Base.max, Base.min
-import Distributions.mean, Distributions.var, Distributions.skewness, Distribution.quantile
+import Distributions.mean, Distributions.var, Distributions.skewness, Distributions.quantile
 import QuadGK.quadgk
 import Roots.find_zero
 import Plots.plot, Plots.plot!
