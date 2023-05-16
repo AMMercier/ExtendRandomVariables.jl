@@ -138,7 +138,11 @@ Alexander M. Mercier
 MacKenzie, Robert Beverley. "The Darwinian theory of the transmutation of species examined." London: Nisbet & Co (1868): 318.
 
 [RandomVariables.jl package](https://github.com/ManuelStapper/RandomVariables.jl)
+
 [Distributions.jl package](https://github.com/JuliaStats/Distributions.jl)
+
 [QuadGK.jl package](https://github.com/JuliaMath/QuadGK.jl)
+
 [Roots.jl package](https://github.com/JuliaMath/Roots.jl)
+
 [Plots.jl package](https://github.com/JuliaPlots/Plots.jl)
