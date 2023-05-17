@@ -162,6 +162,15 @@ This provides the following plots of the CDF and PDF, respectively.
 ![CDF](https://github.com/AMMercier/ExtendRandomVariables.jl/blob/main/images/CDFPlot.png "CDF")
 ![PDF](https://github.com/AMMercier/ExtendRandomVariables.jl/blob/main/images/PDFPlot.png "PDF")
 
+Additionally, for the PMF of a discrete random variable, we have:
+
+```
+X = RV(Poisson(3)); Y = RV(Poisson(4))
+Z = X+Y
+plotPDF(Z)
+```
+![PDF](https://github.com/AMMercier/ExtendRandomVariables.jl/blob/main/images/PMFPlot.png "PMF")
+
 We can also use the "bang" operator `!` via Julia convention for plotting: `plotCDF!` and `plotPDF!`.
 
 ## Future Work
