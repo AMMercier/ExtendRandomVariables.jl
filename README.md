@@ -8,6 +8,8 @@ A Julia package to extend the [RandomVariables.jl](https://github.com/ManuelStap
 - Allow for the maximum and minimum of two independent random variables to create a new random variable `Z=max(X,Y)`, `Z=min(X,Y)`
 - A plotting functions for the CDF and PDF of random variables
 
+This is still very much a work in progress. General optimizations and bug fixes are needed. 
+
 ## Installation
 Both Distributions.jl and RandomVariables.jl must be installed and loaded to use ExtendRandomVariables.jl
 ```
@@ -166,7 +168,7 @@ We can also use the "bang" operator `!` via Julia convention for plotting: `plot
 The largest component of future work is to implement dependent random variables, which would allow more interesting conditional moments. This could be accomplished through a variety of methods, including covariance structure or including interpolated, empirical distributions. Moreover, more arithmetic operations on random variables (such as `X/Y`) would also be appreciated. THis extends to transformations of combinations of random variables, such as `exp(X+Y)` or `exp(X*Y)`. Broadly speaking, for more complex distributions, Monte Carlo methods could be used at the cost of either precision, accuracy, or performance. Additionally, more general optimizations could be made, especially with respect to the addition and multiplication of random variables. Furthermore, random variables from mixed distributions (both continuous and discrete) would also be greatly appreciated and would allow for even greater ease of use for the user. Lastly, reworking the base types from RandomVariables.jl to be compatible with automatic differentiation, including differentiation of random variables (i.e., Malliavin calculus), would be a more ambitious extension of the RandomVariables.jl. It is a hope that at some point in the future random variables may be implemented, up to their limitations, similar to integers, floats, or other types used daily.
 
 ## Author:
-Alexander M. Mercier
+Alexander M. Mercier, amercier@g.harvard.edu
 
 ## References:
 MacKenzie, Robert Beverley. "The Darwinian theory of the transmutation of species examined." London: Nisbet & Co (1868): 318.
