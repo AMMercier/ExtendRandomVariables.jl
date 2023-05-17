@@ -117,6 +117,34 @@ Therefore, if we wish to have the PDF, we must compute $f_Z(z) = \frac{d}{dz} F_
 
 Relatedly, if we wish to determine the quantile function for our random variables, we can find the inverse of the corresponding CDF, $F^{-1}(x)$. For continuous CDF, we can do this through a root finding method using the Roots.jl package. That is, for the p-th quantile, we solve for the root of $F(x) - p$. This is accomplished through by the code `find_zero(x -> cdf(d,x) - p, 0)` where `d` is our distribution. For a discrete CDF, we have that for the p-th quantile, we find the smallest value of $x$ for which $F(x) \geq p$. We can accomplish this computationally by running over the support and determining the first element of the support that fulfills the condition $F(x) \geq p$. If the lower bound or the upper bound of the support is infinite, we can run from or to the `1e-10` quantile or `1-1e-10` quantile, respectively.   
 
+Taken together, we can do some preliminary checks. Consider the following examples:
+
+```
+#Continuous random variables
+julia> X1 = RV(Normal()); Y1 = RV(Normal(3))
+RV(Normal{Float64}(μ=3.0, σ=1.0), 11)
+
+julia> Z1=X1+Y1; 𝔼(Z1)
+3.0000000000000226
+julia> W1=X1*Y2; 𝔼(W1)
+-8.719078556333654e-16
+
+#Discrete random variables
+julia> X2 = RV(Poisson(3)); Y2 = RV(Poisson(4))
+RV(Poisson{Float64}(λ=4.0), 17)
+
+julia> Z2 = X2 + Y2; 𝔼(Z2)
+6.99999999697663
+julia> W2 = X2*Y2; 𝔼(W2)
+11.999971100191376
+
+#Misc. Examples:
+julia> 𝔼(W1|(exp(W1) < 1))
+-2.3942635174048403
+julia> 𝔼(W2|(exp(W2) < 3))
+0.38603161430513455
+```
+
 ## Plots
 When considering a random variable, there are two primary descriptions we would wish to plot: the cumulative distribution function (CDF) and the probability density (or mass) function (PDF or PMF). Consequently, we can write:
 ```
