@@ -156,7 +156,7 @@ end
 #Fix for discrete
 function rv_min(dx::ContinuousDistribution, dy::ContinuousDistribution)
     function pdf(z)
-        temp(x) = 1 - (1 - cdf(X.distr, x))*(1 - cdf(Y.distr, x))
+        temp(x) = 1 - (1 - cdf(dx, x))*(1 - cdf(dy, x))
         return FiniteDifferences.central_fdm(12, 1)(temp, z)
     end
     return pdf
