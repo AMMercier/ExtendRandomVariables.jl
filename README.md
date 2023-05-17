@@ -108,7 +108,7 @@ which allows `X+Y` and `X-Y`. Similarly, for the multiplication of two random va
 
 $P(XY \leq z) = \int_{-\infty}^{\infty} f_X(x)f_Y(z/x)\frac{1}{|x|} dx$
 
-This is implemented using Gaussian quadrature from the QuadGK.jl package. It is worth noting that for some random variables, the order of the corresponding polynomial is quite large and computation time relatively slow. Other more computationally efficient options to complete these convolutions could be explored in the future, such as FTT.
+This is implemented using Gaussian quadrature from the QuadGK.jl package. It is worth noting that for some random variables, the order of the corresponding polynomial is quite large and computation time relatively slow. Other more computationally efficient options to complete these convolutions could be explored in the future, such as FTT. It is worth noting that the evaluation of the integral commonly fails to converge about the range that contains $0$. Accordingly, we must break the integral into peices about the singularity. That is, we treat the singularity like an end point of two corresponding integrals that we subsequently add together. Better methods to handle such points is a consideration of future updates.
 
 For `max` or `min` of two independent random variables $X$ and $Y$, we have that we can most easily identify the CDF. Letting $Z_1=\max(X,Y)$ and $Z_2 =\min(X,Y)$, we have that
 
@@ -119,7 +119,7 @@ Therefore, if we wish to have the PDF, we must compute $f_Z(z) = \frac{d}{dz} F_
 
 Relatedly, if we wish to determine the quantile function for our random variables, we can find the inverse of the corresponding CDF, $F^{-1}(x)$. For continuous CDF, we can do this through a root finding method using the Roots.jl package. That is, for the p-th quantile, we solve for the root of $F(x) - p$. This is accomplished through by the code `find_zero(x -> cdf(d,x) - p, 0)` where `d` is our distribution. For a discrete CDF, we have that for the p-th quantile, we find the smallest value of $x$ for which $F(x) \geq p$. We can accomplish this computationally by running over the support and determining the first element of the support that fulfills the condition $F(x) \geq p$. If the lower bound or the upper bound of the support is infinite, we can run from or to the `1e-10` quantile or `1-1e-10` quantile, respectively.   
 
-Taken together, we can do some preliminary checks. Consider the following examples:
+Taken together, we can do some preliminary checks and examples. Consider the following:
 
 ```
 #Continuous random variables
