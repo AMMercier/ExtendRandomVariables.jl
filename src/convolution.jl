@@ -125,10 +125,10 @@ end
 end
 
 #Fix for discrete
-function rv_max(dx::UnivariateDistribution, dy::UnivariateDistribution)
+function rv_max(dx::ContinuousDistribution, dy::ContinuousDistribution)
     function pdf(z)
         temp(x) = cdf(dx, x)*cdf(dy, x)
-        return central_fdm(12, 1)(temp, z)
+        return FiniteDifferences.central_fdm(12, 1)(temp, z)
     end
     return pdf
 end
@@ -154,10 +154,10 @@ end
 end
 
 #Fix for discrete
-function rv_min(dx::UnivariateDistribution, dy::UnivariateDistribution)
+function rv_min(dx::ContinuousDistribution, dy::ContinuousDistribution)
     function pdf(z)
         temp(x) = 1 - (1 - cdf(X.distr, x))*(1 - cdf(Y.distr, x))
-        return central_fdm(12, 1)(temp, z)
+        return FiniteDifferences.central_fdm(12, 1)(temp, z)
     end
     return pdf
 end
