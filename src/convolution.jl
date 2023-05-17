@@ -124,7 +124,17 @@ end
     return RV(conv)
 end
 
-#Fix for discrete
+function rv_min(dx::DiscreteDistribution, dy::DiscreteDistribution)
+    min = minimum([quantile(dx, 1e-10), quantile(dy, 1e-10)])
+    max = maximum([quantile(dx, 1-1e-10), quantile(dy, 1-1e-10)])
+    sup = collect(min:max)
+    function pdf(z)
+        temp(x) = cdf(dx, x)*cdf(dy, x)
+        temp(z) - temp(z-1)
+    end
+    return pdf
+end
+
 function rv_max(dx::ContinuousDistribution, dy::ContinuousDistribution)
     function pdf(z)
         temp(x) = cdf(dx, x)*cdf(dy, x)
@@ -153,7 +163,17 @@ end
     return RV(conv)
 end
 
-#Fix for discrete
+function rv_min(dx::DiscreteDistribution, dy::DiscreteDistribution)
+    min = minimum([quantile(dx, 1e-10), quantile(dy, 1e-10)])
+    max = maximum([quantile(dx, 1-1e-10), quantile(dy, 1-1e-10)])
+    sup = collect(min:max)
+    function pdf(z)
+        temp(x) = 1 - (1 - cdf(X.distr, x))*(1 - cdf(Y.distr, x))
+        temp(z) - temp(z-1)
+    end
+    return pdf
+end
+
 function rv_min(dx::ContinuousDistribution, dy::ContinuousDistribution)
     function pdf(z)
         temp(x) = 1 - (1 - cdf(dx, x))*(1 - cdf(dy, x))
