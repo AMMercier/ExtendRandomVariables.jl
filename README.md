@@ -102,6 +102,7 @@ Lastly, mathematically, for $\mathbb{E}(X\mid Y)$ where both $X$ and $Y$ are ran
 We can find the addition or multiplication of two random variables through a "convolutional" framework. For addition of two independent random variables, we have that 
 
 $P(X+Y \leq z) = \int_{-\infty}^{\infty} f_X(z-x)f_Y(x) dx$
+
 $P(X-Y \leq z) = \int_{-\infty}^{\infty} f_X(z+x)f_Y(x) dx$
 
 which allows `X+Y` and `X-Y`. Similarly, for the multiplication of two random variables $X$ and $Y$
@@ -113,6 +114,7 @@ This is implemented using Gaussian quadrature from the QuadGK.jl package. It is 
 For `max` or `min` of two independent random variables $X$ and $Y$, we have that we can most easily identify the CDF. Letting $Z_1=\max(X,Y)$ and $Z_2 =\min(X,Y)$, we have that
 
 $F_{Z_1}(z) = F_X(z)F_Y(z) $
+
 $F_{Z_2}(z) = 1 - (1-F_X(z))(1-F_Y(z))$
 
 Therefore, if we wish to have the PDF, we must compute $f_Z(z) = \frac{d}{dz} F_Z(z)$. As the RandomVariable.jl types do not support automatic differentiation, we can use finite differencing methods provided by the FiniteDifferences.jl package. A future reworking of the RandomVariables.jl types
