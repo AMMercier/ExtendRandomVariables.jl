@@ -124,7 +124,7 @@ end
     return RV(conv)
 end
 
-function rv_min(dx::DiscreteDistribution, dy::DiscreteDistribution)
+function rv_max(dx::DiscreteDistribution, dy::DiscreteDistribution)
     min = minimum([quantile(dx, 1e-10), quantile(dy, 1e-10)])
     max = maximum([quantile(dx, 1-1e-10), quantile(dy, 1-1e-10)])
     sup = collect(min:max)
@@ -132,7 +132,7 @@ function rv_min(dx::DiscreteDistribution, dy::DiscreteDistribution)
         temp(x) = cdf(dx, x)*cdf(dy, x)
         temp(z) - temp(z-1)
     end
-    return pdf
+    return pdf, min, max
 end
 
 function rv_max(dx::ContinuousDistribution, dy::ContinuousDistribution)
@@ -158,7 +158,7 @@ end
         conv = ConvolutionContinuous(distr, min, max)
     elseif X.distr isa DiscreteDistribution && Y.distr isa DiscreteDistribution
         distr = rv_max(X.distr, Y.distr)
-        conv = ConvolutionDiscrete(distr, min, max)
+        conv = ConvolutionDiscrete(distr[1], distr[2], distr[3])
     end
     return RV(conv)
 end
@@ -171,7 +171,7 @@ function rv_min(dx::DiscreteDistribution, dy::DiscreteDistribution)
         temp(x) = 1 - (1 - cdf(X.distr, x))*(1 - cdf(Y.distr, x))
         temp(z) - temp(z-1)
     end
-    return pdf
+    return pdf, min, max
 end
 
 function rv_min(dx::ContinuousDistribution, dy::ContinuousDistribution)
@@ -197,7 +197,7 @@ end
         conv = ConvolutionContinuous(distr, min, max)
     elseif X.distr isa DiscreteDistribution && Y.distr isa DiscreteDistribution
         distr = rv_min(X.distr, Y.distr)
-        conv = ConvolutionDiscrete(distr, min, max)
+        conv = ConvolutionDiscrete(distr[1], distr[2], distr[3])
     end
     return RV(conv)
 end

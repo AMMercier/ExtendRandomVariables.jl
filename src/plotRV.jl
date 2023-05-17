@@ -38,8 +38,8 @@ end
 function plotPDF!(X::RV; kwargs...) 
     if typeof(X.distr) <: DiscreteDistribution
         sup = collect((quantile(X.distr, 1e-10)):(quantile(X.distr, 1 - 1e-10)))
-        ys = pdf!(X.distr, sup)
-        plot(sup, ys, seriestype=:scatter; kwargs...)
+        ys = pdf(X.distr, sup)
+        plot!(sup, ys, seriestype=:scatter; kwargs...)
     else
         plot!(x -> pdf(X.distr, x), quantile(X.distr, 0.01), quantile(X.distr, 0.99); kwargs...)
     end
