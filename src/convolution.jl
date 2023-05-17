@@ -20,21 +20,17 @@ end
 function continuous_mult_convolution(dx::ContinuousDistribution, dy::ContinuousDistribution)
     #Order has to be quite high for some convolutions
     function pdf(z)
-        if z == 0
-            val = 0
-        else
-            val = quadgk(x -> (Distributions.pdf(dx,x) * Distributions.pdf(dy,z/x))*(1/abs(x)), -Inf, 1e-10, order=200)[1]
-            val += quadgk(x -> (Distributions.pdf(dx,x) * Distributions.pdf(dy,z/x))*(1/abs(x)), 1e-10, Inf, order=200)[1]
-        end
+        val = quadgk(x -> (Distributions.pdf(dx,x) * Distributions.pdf(dy,z/x))*(1/abs(x)), -Inf, 0, Inf, order=200)[1]
+        #val += quadgk(x -> (Distributions.pdf(dx,x) * Distributions.pdf(dy,z/x))*(1/abs(x)), -Inf, 0, order=200)[1]
     end
     return pdf
 end
 
 function discrete_mult_convolution(dx::DiscreteDistribution, dy::DiscreteDistribution)
-    l = *(quantile(dx, 1e-10), quantile(dy, 1e-10))
-    u = *(quantile(dx, 1-1e-10), quantile(dy, 1-1e-10))
+    l = sum([quantile(dx, 1e-10), quantile(dy, 1e-10)])
+    u = sum([quantile(dx, 1-1e-10), quantile(dy, 1-1e-10)])
     sup = collect(l:u)
-    pmf(z) = sum(Distributions.pdf.(dx, sup).*Distributions.pdf.(dy, z ./ sup))
+    pmf(z) = sum(isinteger.(z ./ sup).*Distributions.pdf.(dx, sup).*Distributions.pdf.(dy, z ./ sup))
     return pmf, l, u
 end
 
@@ -66,6 +62,28 @@ function discrete_sub_convolution(dx::DiscreteDistribution, dy::DiscreteDistribu
     return pmf, l, u
 end
 
+(Base.:-)(X::RV, Y::RV) = begin
+    if X.id == Y.id
+        error("Dependent variables not yet supported.")
+    elseif X.distr isa ContinuousDistribution && Y.distr isa DiscreteDistribution
+        error("Mixed distributions (Continuous & Discrete) not yet supproted.")
+    elseif X.distr isa DiscreteDistribution && Y.distr isa ContinuousDistribution
+        error("Mixed distributions (Continuous & Discrete) not yet supported.")
+    end
+    min = minimum([minimum(X.distr), minimum(Y.distr)])
+    max = maximum([maximum(X.distr), maximum(Y.distr)])
+    if X.distr isa ContinuousDistribution && Y.distr isa ContinuousDistribution
+        distr = continuous_sub_convolution(X.distr, Y.distr)
+        conv = ConvolutionContinuous(distr, min, max)
+    elseif X.distr isa DiscreteDistribution && Y.distr isa DiscreteDistribution
+        distr = discrete_sub_convolution(X.distr, Y.distr)
+        conv = ConvolutionDiscrete(distr[1], distr[2], distr[3])
+    end
+    return RV(conv)
+end
+
+
+
 (Base.:*)(X::RV, Y::RV) = begin
     if X.id == Y.id
         error("Dependent variables not yet supported.")
@@ -74,8 +92,8 @@ end
     elseif X.distr isa DiscreteDistribution && Y.distr isa ContinuousDistribution
         error("Mixed distributions (Continuous & Discrete) not yet supported.")
     end
-    min = minimum(X.distr) * minimum(Y.distr)
-    max = maximum(X.distr) * maximum(Y.distr)
+    min = minimum([minimum(X.distr), minimum(Y.distr)])
+    max = maximum([maximum(X.distr), maximum(Y.distr)])
     if X.distr isa ContinuousDistribution && Y.distr isa ContinuousDistribution
         distr = continuous_mult_convolution(X.distr, Y.distr)
         conv = ConvolutionContinuous(distr, min, max)
@@ -106,26 +124,7 @@ end
     return RV(conv)
 end
 
-(Base.:-)(X::RV, Y::RV) = begin
-    if X.id == Y.id
-        error("Dependent variables not yet supported.")
-    elseif X.distr isa ContinuousDistribution && Y.distr isa DiscreteDistribution
-        error("Mixed distributions (Continuous & Discrete) not yet supproted.")
-    elseif X.distr isa DiscreteDistribution && Y.distr isa ContinuousDistribution
-        error("Mixed distributions (Continuous & Discrete) not yet supported.")
-    end
-    min = minimum([minimum(X.distr), minimum(Y.distr)])
-    max = maximum([maximum(X.distr), maximum(Y.distr)])
-    if X.distr isa ContinuousDistribution && Y.distr isa ContinuousDistribution
-        distr = continuous_sub_convolution(X.distr, Y.distr)
-        conv = ConvolutionContinuous(distr, min, max)
-    elseif X.distr isa DiscreteDistribution && Y.distr isa DiscreteDistribution
-        distr = discrete_sub_convolution(X.distr, Y.distr)
-        conv = ConvolutionDiscrete(distr[1], distr[2], distr[3])
-    end
-    return RV(conv)
-end
-
+#Fix for discrete
 function rv_max(dx::UnivariateDistribution, dy::UnivariateDistribution)
     function pdf(z)
         temp(x) = cdf(dx, x)*cdf(dy, x)
@@ -154,6 +153,7 @@ end
     return RV(conv)
 end
 
+#Fix for discrete
 function rv_min(dx::UnivariateDistribution, dy::UnivariateDistribution)
     function pdf(z)
         temp(x) = 1 - (1 - cdf(X.distr, x))*(1 - cdf(Y.distr, x))
@@ -228,14 +228,24 @@ function Distributions.minimum(d::T)::Real where {T <: Convolution}
 end
 
 function Distributions.mean(d::T)::Real where {T <: ConvolutionContinuous}
-    ret = quadgk(x -> x*d.pdf(x), minimum(d), maximum(d))[1]
-    ret
+    try 
+        return quadgk(x -> x*d.pdf(x), minimum(d), maximum(d))[1]
+    catch y
+        if isa(y, DomainError)
+            return quadgk(x -> x*(d.pdf(x)), minimum(d), 0, maximum(d))[1]
+        else
+            error("Integral did not converge")
+        end
+    end
 end
 
 function Distributions.mean(d::T)::Real where {T <: ConvolutionDiscrete}
     sup = collect((quantile(d, 1e-10)):(quantile(d, 1 - 1e-10)))
     return sum(pdf.(d, sup).*(sup))
 end
+
+# function RandomVariables.myexp(f::Function, d::ContinuousConvolution)
+
 
 function Distributions.quantile(d::ConvolutionContinuous, p::Real)::Real 
     ret = find_zero(x -> cdf(d,x) - p, 0)
@@ -244,7 +254,7 @@ end
 
 function Distributions.quantile(d::ConvolutionDiscrete, p::Real)::Real 
     #quantile for p is smallest value of x for which CDF(x) ≥ p
-    sup = collect(d.l:d.u)
+    sup = collect(d.l:(d.u+100))
     temp = vcat(cdf(d, sup), 1)
     ret = findfirst(temp .≥ p) 
     ret - 1

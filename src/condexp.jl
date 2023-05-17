@@ -9,6 +9,7 @@ end
 end
 
 𝔼(X::RV) = E(X)
+𝔼(X::RVtransformed) = E(X)
 
 function 𝔼(X::condRVevent)
     Y = X.of
