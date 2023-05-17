@@ -171,7 +171,8 @@ plotPDF(Z)
 ```
 ![PDF](https://github.com/AMMercier/ExtendRandomVariables.jl/blob/main/images/PMFPlot.png "PMF")
 
-When the end points aren't explictly specified, as in `plotPDF(Z)`, the x limits of the plot are the 1% and 99% quantiles. 
+When the end points aren't explicitly specified, as in `plotPDF(Z)`, the x limits of the plot are the 1% and 99% quantiles. 
+
 Also, we can also use the "bang" operator `!` via Julia convention: `plotCDF!` and `plotPDF!`.
 
 ## Future Work
