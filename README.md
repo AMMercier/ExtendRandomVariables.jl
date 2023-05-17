@@ -19,8 +19,9 @@ julia> Pkg.add("RandomVariables")
 julia> Pkg.add("QuadGK")
 julia> Pkg.add("Roots")
 julia> Pkg.add("Plots")
+julia> Pkg.add("FiniteDifferences")
 julia> Pkg.add(url = "https://github.com/AMMercier/ExtendRandomVariables.jl.git")
-julia> using RandomVariables, Distributions, ExtendRandomVariables, Plots
+julia> using RandomVariables, Distributions, ExtendRandomVariables, FiniteDifferences, Plots
 ```
 ## Introduction
 ### *"In order to make a perfect and beautiful machine, it is not requisite to know how to make it."* 
