@@ -196,6 +196,8 @@ MacKenzie, Robert Beverley. "The Darwinian theory of the transmutation of specie
 
 [QuadGK.jl package](https://github.com/JuliaMath/QuadGK.jl)
 
+[FiniteDifferences package](https://github.com/JuliaDiff/FiniteDifferences.jl)
+
 [Roots.jl package](https://github.com/JuliaMath/Roots.jl)
 
 [Plots.jl package](https://github.com/JuliaPlots/Plots.jl)
