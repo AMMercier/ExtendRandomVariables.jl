@@ -171,7 +171,8 @@ plotPDF(Z)
 ```
 ![PDF](https://github.com/AMMercier/ExtendRandomVariables.jl/blob/main/images/PMFPlot.png "PMF")
 
-We can also use the "bang" operator `!` via Julia convention for plotting: `plotCDF!` and `plotPDF!`.
+When the end points aren't explictly specified, as in `plotPDF(Z)`, the x limits of the plot are the 1% and 99% quantiles. 
+Also, we can also use the "bang" operator `!` via Julia convention: `plotCDF!` and `plotPDF!`.
 
 ## Future Work
 The largest component of future work is to implement dependent random variables, which would allow more interesting conditional moments. This could be accomplished through a variety of methods, including covariance structure or including interpolated, empirical distributions. Moreover, more arithmetic operations on random variables (such as `X/Y`) would also be appreciated. This extends to the expectation of the transformations of combinations of random variables, such as `𝔼(exp(X+Y))` or `𝔼(exp(X*Y))` which commonly fails due to singularities causing the quadrature to fail. Broadly speaking, for more complex distributions, Monte Carlo methods could be used at the cost of either precision, accuracy, or performance. Additionally, more general optimizations could be made, especially with respect to the addition and multiplication of random variables. Furthermore, random variables from mixed distributions (both continuous and discrete) would also be greatly appreciated and would allow for even greater ease of use for the user. Lastly, reworking the base types from RandomVariables.jl to be compatible with automatic differentiation, including differentiation of random variables (i.e., Malliavin calculus), would be a more ambitious extension of the RandomVariables.jl. It is a hope that at some point in the future random variables may be implemented, up to their limitations, similar to integers, floats, or other types used daily.
